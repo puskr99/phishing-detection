@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phishing Detection Results</title>
+    <style>
+        :root {
+            --phishing-red: #ff4444;
+            --safe-green: #00C851;
+            --warning-orange: #ffbb33;
+            --dark-bg: #2E2E2E;
+            --light-text: #FFFFFF;
+            --card-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .scan-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: var(--card-shadow);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .url-display {
+            font-size: 18px;
+            word-break: break-all;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .verdict {
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        
+        .phishing {
+            background-color: #ffebee;
+            color: var(--phishing-red);
+            border: 2px solid var(--phishing-red);
+        }
+        
+        .legitimate {
+            background-color: #e8f5e9;
+            color: var(--safe-green);
+            border: 2px solid var(--safe-green);
+        }
+        
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #4285f4;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: #3367d6;
+        }
+        
+        .error-box {
+            background: #ffebee;
+            color: var(--phishing-red);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+            border: 1px solid var(--phishing-red);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Phishing Detection Results</h1>
+    </div>
+    
+    {% if error %}
+        <div class="scan-card">
+            <div class="error-box">
+                <h3>⚠️ Scan Error</h3>
+                <p><strong>URL:</strong> {{ url }}</p>
+                <p><strong>Error:</strong> {{ error }}</p>
+                <p>Scan took {{ scan_time }} seconds</p>
+            </div>
+            <a href="/" class="back-btn">Try Another URL</a>
+        </div>
+    {% else %}
+        <div class="scan-card">
+            <div class="url-display">
+                <strong>Scanned URL:</strong> {{ result.url }}
+            </div>
+            
+            <div class="verdict {{ 'phishing' if result.status == 'Phishing' else 'legitimate' }}">
+                {{ result.status }} Website
+            </div>
+            
+            <a href="/" class="back-btn">Scan Another URL</a>
+        </div>
+    {% endif %}
+</body>
+</html>
