@@ -59,11 +59,9 @@ def predict_phishing(url):
 
     # Make prediction
     prediction = model.predict(scaled_features)[0]
-    probability = model.predict_proba(scaled_features)[0][1]
 
     return {
         'prediction': prediction,
-        'probability': probability,
         'features': raw_features,
         'scaled_features': scaled_features[0].tolist(),
         'feature_names': EXPECTED_FEATURES
@@ -94,11 +92,9 @@ def scan_url():
         response = {
             'url': url,
             'status': 'Phishing' if result['prediction'] == 1 else 'Legitimate',
-            'confidence': round(result['probability'] * 100, 2),
             'features': result['features'],
             'scaled_features': dict(zip(result['feature_names'], result['scaled_features'])),
             'scan_time': round(scan_time, 2),
-            'timestamp': start_time.strftime('%Y-%m-%d %H:%M:%S'),
             'feature_names': result['feature_names']
         }
 
