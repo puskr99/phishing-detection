@@ -268,7 +268,7 @@
                 updatesDiv.innerHTML = `<p style="color: #28a745;">Scan Complete!</p>`;
     
                 const { prediction, probabilities, features: featureValues, feature_names } = data;
-    
+
                 // Display the main prediction result
                 resultDiv.style.display = 'block';
                 resultDiv.innerHTML = `
@@ -278,6 +278,12 @@
                             ${prediction === 1 ? "Phishing" : "Legitimate"}
                         </span>
                     </p>
+                    <p><strong>Confidence:</strong></p>
+                        <span style="color: ${prediction === 1 ? 'red' : 'green'}; font-size: 1.5rem; font-weight: bold;">
+                        ${prediction === 1 
+                            ? (probabilities[1] * 100).toFixed(2) 
+                            : (probabilities[0] * 100).toFixed(2)}%
+                        </span>
                 `;
     
                 // Populate the features panel
@@ -293,54 +299,55 @@
                         let suspiciousTag = '';
     
                         // Heuristic rules to flag suspicious features
-                        if (name === 'qty_slash_url' && value > 4) {
+                        if (name === 'qty_slash_url' && value > 5) {
                             description = 'High number of slashes in the URL.';
                             suspiciousTag = ' (Suspicious)';
-                        } else if (name === 'length_url' && value > 25) {
+                        } else if (name === 'length_url' && value > 35) {
                             description = 'URL is excessively long.';
                             suspiciousTag = ' (Suspicious)';
-                        } else if (name === 'qty_special_chars' && value > 4) {
-                            description = 'Unusual number of special characters in the URL.';
+                        } else if (name === 'qty_dot_directory' && value > 3) {
+                            description = 'Unusual number of dots in the directory.';
                             suspiciousTag = ' (Suspicious)';
-                        } else if (name === 'qty_digits_domain' && value > 4) {
-                            description = 'Too many digits in the domain name.';
+                        } else if (name === 'qty_hyphen_directory' && value > 3) {
+                            description = 'Too many hyphens in the directory.';
                             suspiciousTag = ' (Suspicious)';
-                        } else if (name === 'qty_subdomains' && value > 3) {
-                            description = 'High number of subdomains.';
+                        } else if (name === 'qty_underline_directory' && value > 2) {
+                            description = 'Excessive number of underscores in the directory.';
                             suspiciousTag = ' (Suspicious)';
-                        } else if (name === 'presence_of_ip' && value === true) {
-                            description = 'URL contains an IP address instead of a domain.';
+                        } else if (name === 'qty_questionmark_directory' && value > 1) {
+                            description = 'Too many question marks in the directory.';
                             suspiciousTag = ' (Suspicious)';
-                        } else if (name === 'presence_of_https' && value === false) {
-                            description = 'URL does not use HTTPS.';
+                        } else if (name === 'directory_length' && value > 50) {
+                            description = 'Directory length is unusually long.';
                             suspiciousTag = ' (Suspicious)';
-                        } else if (name === 'qty_redirects' && value > 2) {
-                            description = 'Excessive number of redirects in the URL.';
+                        } else if (name === 'qty_hyphen_file' && value > 1) {
+                            description = 'Too many hyphens in the file name.';
                             suspiciousTag = ' (Suspicious)';
-                        } else if (name === 'qty_queries' && value > 3) {
-                            description = 'Too many query parameters in the URL.';
+                        } else if (name === 'file_length' && value > 30) {
+                            description = 'File name length is excessively long.';
                             suspiciousTag = ' (Suspicious)';
-                        } else if (name === 'presence_of_at_symbol' && value === true) {
-                            description = 'URL contains an "@" symbol.';
+                        } else if (name === 'qty_dot_params' && value > 2) {
+                            description = 'Unusual number of dots in the parameters.';
                             suspiciousTag = ' (Suspicious)';
-                        } else if (name === 'qty_misleading_tlds' && value > 0) {
-                            description = 'Presence of misleading top-level domains.';
+                        } else if (name === 'qty_underline_params' && value > 1) {
+                            description = 'Excessive number of underscores in the parameters.';
                             suspiciousTag = ' (Suspicious)';
-                        } else if (name === 'domain_age' && value < 6) {
-                            description = 'Domain age is less than 6 months.';
+                        } else if (name === 'ttl_hostname' && value < 60) {
+                            description = 'Low TTL value for hostname.';
                             suspiciousTag = ' (Suspicious)';
-                        } else if (name === 'domain_expiry' && value < 12) {
-                            description = 'Domain expiry is less than 12 months.';
+                        } else if (name === 'asn_ip' && value === 0) {
+                            description = 'ASN is not resolvable.';
                             suspiciousTag = ' (Suspicious)';
-                        } else if (name === 'presence_of_suspicious_words' && value > 0) {
-                            description = 'Contains suspicious words (e.g., "login", "secure", "verify").';
+                        } else if (name === 'time_domain_activation' && value < 180) {
+                            description = 'Domain activation time is less than 6 months.';
+                            suspiciousTag = ' (Suspicious)';
+                        } else if (name === 'time_domain_expiration' && value < 365) {
+                            description = 'Domain expiration time is less than 1 year.';
                             suspiciousTag = ' (Suspicious)';
                         } else {
                             description = '';
                             suspiciousTag = '';
                         }
-
-                        // Add more heuristic rules as needed...
     
                         const listItem = document.createElement('li');
                         listItem.innerHTML = `

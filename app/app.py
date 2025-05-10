@@ -12,7 +12,7 @@ socketio = SocketIO(app)
 EXPECTED_FEATURES = [
     'qty_slash_url', 'length_url', 'qty_dot_directory', 'qty_hyphen_directory',
     'qty_underline_directory', 'qty_questionmark_directory', 'directory_length',
-    'qty_hyphen_file', 'file_length', 'qty_dot_params', 'qty_questionmark_params',
+    'qty_hyphen_file', 'file_length', 'qty_dot_params', 'qty_underline_params',
     'asn_ip', 'time_domain_activation', 'time_domain_expiration', 'ttl_hostname',
 ]
 
@@ -66,13 +66,10 @@ def predict_phishing(features):
 
     # Scale features
     scaled_features = scaler.transform(features_array)
-    print("Scaled features")
+
     # Make prediction
     prediction = model.predict(scaled_features)[0]
     prediction_probabilities = model.predict_proba(scaled_features)[0]
-    print("Scaled features 2")
-
-    print(len(ordered_features.reshape(-1, 1)), len(EXPECTED_FEATURES))
 
     return {
         'prediction': int(prediction),
