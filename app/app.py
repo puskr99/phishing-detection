@@ -85,7 +85,7 @@ def handle_scan(data):
     if not url:
         emit('scan_update', {'error': 'Invalid URL'})
         return
-
+    print("Here")
     try:
         if not url.startswith(('http://', 'https://')):
             url = 'http://' + url
@@ -101,6 +101,7 @@ def handle_scan(data):
         # Prediction step
         send_update("Running the prediction model...")
         prediction_result = predict_phishing(features)
+        print("Here")
 
         send_update("Prediction complete. Preparing response.")
         emit('scan_complete', prediction_result)
@@ -116,3 +117,10 @@ if __name__ == '__main__':
 
 
 
+                    # <p><strong>Confidence:</strong>
+                    #     <span style="color: ${prediction === 1 ? 'red' : 'green'}; font-size: 1.5rem; font-weight: bold;">
+                    #         ${prediction === 1 
+                    #             ? (probabilities[1] * 100).toFixed(2) 
+                    #             : (probabilities[0] * 100).toFixed(2)}%
+                    #     </span>
+                    # </p>

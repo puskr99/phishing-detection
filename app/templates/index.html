@@ -410,16 +410,9 @@
                 resultDiv.style.display = 'block';
                 resultDiv.innerHTML = `
                     <h2>Scan Result</h2>
-                    <p><strong>Prediction:</strong>
+                    <p>
                         <span style="color: ${prediction === 1 ? 'red' : 'green'}; font-size: 1.5rem; font-weight: bold;">
                             ${prediction === 1 ? "Phishing" : "Legitimate"}
-                        </span>
-                    </p>
-                    <p><strong>Confidence:</strong>
-                        <span style="color: ${prediction === 1 ? 'red' : 'green'}; font-size: 1.5rem; font-weight: bold;">
-                            ${prediction === 1 
-                                ? (probabilities[1] * 100).toFixed(2) 
-                                : (probabilities[0] * 100).toFixed(2)}%
                         </span>
                     </p>
                 `;
