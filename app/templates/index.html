@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Phishing Website Detector</title>
+    <title>Is it a Phish? - Protect Yourself Online</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -16,31 +17,56 @@
             background: linear-gradient(135deg, #6e8efb, #a777e3);
             color: white;
             box-sizing: border-box;
+            overflow-x: hidden;
         }
 
-        .page-title {
-            margin-bottom: 20px;
-            font-size: 2.5rem;
+        .hero-section {
             text-align: center;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            padding: 30px 20px;
+            background: rgba(0, 0, 0, 0.4);
             width: 100%;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 1s ease-in-out;
+            border-bottom: 2px solid #ffc107;
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            animation: slideIn 1s ease-in-out;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 10px;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+        .trust-indicator {
+            font-size: 0.9rem;
+            color: #ffc107;
+            margin-top: 10px;
         }
 
         .main-container {
             display: flex;
-            flex-direction: row; /* Children side-by-side */
-            gap: 20px; /* Space between main content and features panel */
+            flex-direction: row;
+            gap: 20px;
             width: 100%;
-            max-width: 1200px; /* Max width for the entire layout */
-            align-items: flex-start; /* Align items to the top */
+            max-width: 1200px;
+            align-items: flex-start;
+            padding: 20px;
         }
 
         .scanner-content {
-            flex: 2; /* Takes up 2/3 of the space */
+            flex: 2;
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 100%; /* Ensure it uses the allocated flex space */
+            width: 100%;
         }
 
         form {
@@ -50,12 +76,13 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-            width: 100%; /* Fill scanner-content */
-            max-width: 600px; /* Max-width for the form itself */
+            width: 100%;
+            max-width: 600px;
+            animation: fadeInUp 1s ease-in-out;
         }
 
         #url {
-            width: calc(100% - 32px); /* Adjust width considering padding */
+            width: calc(100% - 32px);
             padding: 12px 15px;
             border: none;
             border-radius: 5px;
@@ -63,11 +90,13 @@
             font-size: 16px;
             box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.1);
             outline: none;
+            transition: transform 0.3s ease;
         }
 
         #url:focus {
             outline: 2px solid #6e8efb;
             background-color: #f3f3f3;
+            transform: scale(1.02);
         }
 
         button {
@@ -79,36 +108,24 @@
             cursor: pointer;
             font-size: 16px;
             width: 100%;
-            transition: background-color 0.3s ease-in-out;
+            transition: background-color 0.3s ease-in-out, transform 0.2s ease;
         }
 
         button:hover {
             background-color: #ff3b3f;
+            transform: translateY(-2px);
         }
 
-        #updates {
-            margin-top: 10px;
-            padding: 10px;
-            background: rgba(0, 0, 0, 0.7);
-            border-radius: 10px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            display: none; /* Hide updates div initially */
-            width: 100%;
-            max-width: 600px; /* Consistent with form */
-        }
-
-        #result {
+        #updates, #result {
             margin-top: 20px;
             padding: 20px;
             background: rgba(0, 0, 0, 0.7);
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
             text-align: center;
-            width: 100%; /* Consistent with form */
+            width: 100%;
             max-width: 600px;
-            word-wrap: break-word;
-            display: none; /* Hide result div initially */
+            display: none;
         }
 
         #result h2 {
@@ -117,14 +134,14 @@
         }
 
         .features-panel {
-            flex: 1; /* Takes up 1/3 of the space */
+            flex: 1;
             padding: 20px;
-            background: rgba(0, 0, 0, 0.3); /* Slightly different background */
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-            display: none; /* Initially hidden */
-            max-width: 400px; /* Max width for features panel */
-            height: fit-content; /* Adjust height to content */
+            display: none;
+            max-width: 400px;
+            height: fit-content;
         }
 
         .features-panel h2 {
@@ -132,7 +149,6 @@
             margin-bottom: 15px;
             font-size: 1.5rem;
             text-align: center;
-            color: #fff;
         }
 
         .features-panel ul {
@@ -147,15 +163,10 @@
             border-radius: 5px;
             margin-bottom: 10px;
             font-size: 0.95em;
-            word-wrap: break-word; /* Ensure long feature descriptions wrap */
         }
 
         .features-panel li strong {
-            color: #ffc107; /* Amber color for feature names */
-            display: block; /* Makes the feature name take its own line */
-            margin-bottom: 3px;
-        }
-        .features-panel li .description {
+            color: #ffc107;
             display: block;
             margin-bottom: 3px;
         }
@@ -163,113 +174,239 @@
         .features-panel .raw-value {
             font-size: 0.8em;
             color: #ccc;
-            display: block; /* Ensure it's on a new line or distinct */
+            display: block;
             margin-top: 3px;
         }
 
+        .example-btn {
+            padding: 8px 15px;
+            background-color: #6e8efb;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 0 5px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
 
-        /* Responsive adjustments */
-        @media (max-width: 992px) { /* Medium devices (tablets, less than 992px) */
+        .example-btn:hover {
+            background-color: #5a78e0;
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @media (max-width: 992px) {
             .main-container {
                 flex-direction: column;
-                align-items: center; /* Center items when stacked */
+                align-items: center;
             }
             .scanner-content, .features-panel {
-                flex: none; /* Reset flex property */
+                flex: none;
                 width: 100%;
-                max-width: 600px; /* Allow them to take up similar width when stacked */
+                max-width: 600px;
             }
             .features-panel {
-                margin-top: 20px; /* Add space when stacked */
+                margin-top: 20px;
             }
         }
 
-        @media (max-width: 576px) { /* Small devices (landscape phones, 576px and down) */
-            .page-title { font-size: 2rem; }
-            #url { font-size: 14px; }
-            button { font-size: 14px; }
+        @media (max-width: 576px) {
+            .hero-section h1 { font-size: 2rem; }
+            .hero-section p { font-size: 1rem; }
+            #url, button { font-size: 14px; }
             #result h2 { font-size: 20px; }
             .features-panel h2 { font-size: 1.3rem; }
             .features-panel li { font-size: 0.9em; }
+            .example-btn {
+                display: block;
+                margin: 5px auto;
+                width: 200px;
+            }
+        }
+
+        #particles-js {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        @media (max-width: 768px) {
+            .steps {
+                flex-direction: column;
+                align-items: center;
+            }
+            .step {
+                width: 100%;
+                max-width: 400px;
+            }
         }
     </style>
 </head>
 <body>
-    <h1 class="page-title">Phishing Website Detector</h1>
+    <div id="particles-js"></div>
+
+    <div class="hero-section">
+        <h1>Is it a Phish?</h1>
+        <p>Stay safe online with our advanced phishing detection tool. Simply enter a URL to check if it's safe or a potential threat.</p>
+        <p style="font-size: 1rem; margin: 10px 0; opacity: 0.8;">Protect your data with confidence in seconds.</p>
+        <div class="trust-indicator">🔒 Your privacy is our priority. No data is stored.</div>
+    </div>
 
     <div class="main-container">
         <div class="scanner-content">
             <form id="scan-form">
-                <label for="url" style="display: block; margin-bottom: 10px; font-size: 18px; font-weight: bold;">Enter the URL to Scan</label>
+                <label for="url" style="display: block; margin-bottom: 10px; font-size: 18px; font-weight: bold;">
+                    <i class="fas fa-link" style="margin-right: 8px;"></i>Enter the URL to Scan
+                </label>
                 <input type="url" id="url" name="url" placeholder="https://example.com" required>
-                <button type="submit">Scan URL</button>
+                <button type="submit"><i class="fas fa-search" style="margin-right: 8px;"></i>Scan URL Now</button>
             </form>
+            <div class="example-urls" style="text-align: center; margin-bottom: 20px;">
+                <p style="font-size: 1rem; margin-bottom: 10px;">Try these example URLs:</p>
+                <button class="example-btn" data-url="https://www.google.com">Safe Example</button>
+                <button class="example-btn" data-url="http://fake-login-page.com">Suspicious Example</button>
+            </div>
             <div id="updates">
-                <p>Awaiting updates...</p>
+                <p id="updates-text">Awaiting updates...</p>
+                <div id="loading-spinner" style="display: none; margin: 10px auto;">
+                    <i class="fas fa-spinner fa-spin" style="font-size: 24px;"></i>
+                </div>
             </div>
             <div id="result"></div>
         </div>
 
         <div id="suspicious-features" class="features-panel">
             <h2>Summary</h2>
-            <ul id="features-list">
-                </ul>
+            <ul id="features-list"></ul>
             <p id="no-features-message" style="text-align:center; display:none;">No specific suspicious features highlighted.</p>
         </div>
     </div>
+
+    <div class="how-it-works" style="width: 100%; max-width: 1200px; padding: 40px 20px; text-align: center;">
+        <h2 style="font-size: 2rem; margin-bottom: 20px;">How It Works</h2>
+        <p style="font-size: 1.1rem; max-width: 800px; margin: 0 auto 30px; line-height: 1.6;">
+            Our phishing detection tool uses advanced machine learning to analyze URLs for suspicious patterns. Enter a URL, and we’ll check features like domain age, URL structure, and more to determine if it’s safe or a potential phishing threat.
+        </p>
+        <div class="steps" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+            <div class="step" style="flex: 1; min-width: 250px; background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);">
+                <h3 style="font-size: 1.3rem; margin-bottom: 10px;">Step 1: Enter URL</h3>
+                <p>Input the URL you want to check in the form above.</p>
+            </div>
+            <div class="step" style="flex: 1; min-width: 250px; background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);">
+                <h3 style="font-size: 1.3rem; margin-bottom: 10px;">Step 2: Scan</h3>
+                <p>Our system analyzes the URL for phishing indicators.</p>
+            </div>
+            <div class="step" style="flex: 1; min-width: 250px; background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);">
+                <h3 style="font-size: 1.3rem; margin-bottom: 10px;">Step 3: Get Results</h3>
+                <p>Receive a detailed report on whether the URL is safe or suspicious.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer style="width: 100%; padding: 20px; background: rgba(0, 0, 0, 0.5); text-align: center; margin-top: 40px;">
+        <p style="font-size: 0.9rem; margin: 0;">
+            &copy; 2025 Is it a Phish? | Built with <i class="fas fa-heart" style="color: #ff5e62;"></i> by Anti-Phish Team
+            | <a href="https://csim.cs.ait.ac.th/" style="color: #ffc107; text-decoration: none;">Powered by AIT</a>
+        </p>
+    </footer>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.3/socket.io.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80, density: { enable: true, value_area: 800 } },
+                color: { value: '#ffffff' },
+                shape: { type: 'circle' },
+                opacity: { value: 0.5, random: false },
+                size: { value: 3, random: true },
+                line_linked: { enable: true, distance: 150, color: '#ffffff', opacity: 0.4, width: 1 },
+                move: { enable: true, speed: 2, direction: 'none', random: false, straight: false, out_mode: 'out', bounce: false }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: true, mode: 'repulse' }, onclick: { enable: true, mode: 'push' }, resize: true },
+                modes: { repulse: { distance: 100, duration: 0.4 }, push: { particles_nb: 4 } }
+            },
+            retina_detect: true
+        });
+
         document.addEventListener('DOMContentLoaded', function () {
-            const socket = io(); // Assumes server is at the same origin
-    
-            // Get references to DOM elements
+            const socket = io();
             const scanForm = document.getElementById('scan-form');
             const urlInput = document.getElementById('url');
             const updatesDiv = document.getElementById('updates');
+            const updatesText = document.getElementById('updates-text');
+            const loadingSpinner = document.getElementById('loading-spinner');
             const resultDiv = document.getElementById('result');
             const featuresPanel = document.getElementById('suspicious-features');
             const featuresList = document.getElementById('features-list');
             const noFeaturesMessage = document.getElementById('no-features-message');
-    
-            // Event listener for form submission
+
             scanForm.addEventListener('submit', function (e) {
-                e.preventDefault(); // Prevent default form submission
-                const url = urlInput.value.trim(); // Get and trim URL
+                e.preventDefault();
+                const url = urlInput.value.trim();
                 if (!url) {
-                    alert("Please enter a URL."); // Basic validation
+                    alert("Please enter a URL.");
                     return;
                 }
-    
-                // Reset UI elements for a new scan
-                updatesDiv.innerHTML = '<p>Starting scan...</p>';
-                resultDiv.innerHTML = '';
-                featuresList.innerHTML = ''; // Clear previous features
-    
+
+                if (window.scrollY === 0) {
+                    scanForm.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+
+                updatesText.innerHTML = 'Starting scan...';
+                loadingSpinner.style.display = 'block';
                 updatesDiv.style.display = 'block';
+                resultDiv.innerHTML = '';
+                featuresList.innerHTML = '';
                 resultDiv.style.display = 'none';
-                featuresPanel.style.display = 'block'; // Always show features panel
+                featuresPanel.style.display = 'block';
                 noFeaturesMessage.style.display = 'none';
-    
-                // Emit 'start_scan' event to the server
+
                 socket.emit('start_scan', { url: url });
             });
-    
-            // Event listener for 'scan_update' from server
+
+            document.querySelectorAll('.example-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    urlInput.value = this.dataset.url;
+                    scanForm.dispatchEvent(new Event('submit'));
+                });
+            });
+
             socket.on('scan_update', function (data) {
                 if (data.error) {
-                    updatesDiv.innerHTML = `<p style="color: #ff5e62;">Error: ${data.error}</p>`;
+                    updatesText.innerHTML = `<span style="color: #ff5e62;">Error: ${data.error}</span>`;
+                    loadingSpinner.style.display = 'none';
                 } else {
-                    updatesDiv.innerHTML = `<p>${data.message}</p>`;
+                    updatesText.innerHTML = data.message;
+                    loadingSpinner.style.display = 'block';
                 }
             });
-    
-            // Event listener for 'scan_complete' from server
+
             socket.on('scan_complete', function (data) {
-                updatesDiv.innerHTML = `<p style="color: #28a745;">Scan Complete!</p>`;
-    
+                updatesText.innerHTML = `<span style="color: #28a745;">Scan Complete!</span>`;
+                loadingSpinner.style.display = 'none';
                 const { prediction, probabilities, features: featureValues, feature_names } = data;
 
-                // Display the main prediction result
                 resultDiv.style.display = 'block';
                 resultDiv.innerHTML = `
                     <h2>Scan Result</h2>
@@ -278,27 +415,25 @@
                             ${prediction === 1 ? "Phishing" : "Legitimate"}
                         </span>
                     </p>
-                    <p><strong>Confidence:</strong></p>
+                    <p><strong>Confidence:</strong>
                         <span style="color: ${prediction === 1 ? 'red' : 'green'}; font-size: 1.5rem; font-weight: bold;">
-                        ${prediction === 1 
-                            ? (probabilities[1] * 100).toFixed(2) 
-                            : (probabilities[0] * 100).toFixed(2)}%
+                            ${prediction === 1 
+                                ? (probabilities[1] * 100).toFixed(2) 
+                                : (probabilities[0] * 100).toFixed(2)}%
                         </span>
+                    </p>
                 `;
-    
-                // Populate the features panel
+
                 featuresList.innerHTML = '';
                 featuresPanel.style.display = 'block';
-    
+
                 if (feature_names && featureValues && feature_names.length === featureValues.length) {
                     feature_names.forEach((name, index) => {
                         const value = featureValues[index];
                         const formattedName = name.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-    
                         let description = '';
                         let suspiciousTag = '';
-    
-                        // Heuristic rules to flag suspicious features
+
                         if (name === 'qty_slash_url' && value > 5) {
                             description = 'High number of slashes in the URL.';
                             suspiciousTag = ' (Suspicious)';
@@ -344,11 +479,8 @@
                         } else if (name === 'time_domain_expiration' && value < 365) {
                             description = 'Domain expiration time is less than 1 year.';
                             suspiciousTag = ' (Suspicious)';
-                        } else {
-                            description = '';
-                            suspiciousTag = '';
                         }
-    
+
                         const listItem = document.createElement('li');
                         listItem.innerHTML = `
                             <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.5rem 0;">
@@ -363,24 +495,24 @@
                             </div>
                         `;
                         featuresList.appendChild(listItem);
-
                     });
                 } else {
                     noFeaturesMessage.style.display = 'block';
                     noFeaturesMessage.textContent = 'No feature data available to display.';
                 }
+
             });
-    
-            // Handle connection issues
+
             socket.on('connect_error', (err) => {
-                updatesDiv.innerHTML = `<p style="color: #ff5e62;">Connection Error: ${err.message}</p>`;
+                updatesText.innerHTML = `<span style="color: #ff5e62;">Connection Error: ${err.message}</span>`;
+                loadingSpinner.style.display = 'none';
             });
-    
+
             socket.on('disconnect', () => {
-                updatesDiv.innerHTML = `<p style="color: #ffc107;">Disconnected from server.</p>`;
+                updatesText.innerHTML = `<span style="color: #ffc107;">Disconnected from server.</span>`;
+                loadingSpinner.style.display = 'none';
             });
         });
     </script>
-    
 </body>
 </html>
